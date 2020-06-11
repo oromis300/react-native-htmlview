@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import htmlToElement from './htmlToElement';
 import {Linking, Platform, StyleSheet, View, ViewPropTypes} from 'react-native';
 
-const boldStyle = {fontWeight: '500'};
+const boldStyle = {fontWeight: 'bold'};
 const italicStyle = {fontStyle: 'italic'};
 const underlineStyle = {textDecorationLine: 'underline'};
 const strikethroughStyle = {textDecorationLine: 'line-through'};
@@ -54,9 +54,9 @@ class HtmlView extends PureComponent {
     this.startHtmlRender(this.props.value);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.value !== prevProps.value || this.props.stylesheet !== prevProps.stylesheet || this.props.textComponentProps !== prevProps.textComponentProps || this.props.nodeComponentProps !== prevProps.nodeComponentProps) {
-      this.startHtmlRender(this.props.value, this.props.stylesheet, this.props.textComponentProps, this.props.nodeComponentProps);
+  componentWillReceiveProps(nextProps) {
+    if (this.props.value !== nextProps.value || this.props.stylesheet !== nextProps.stylesheet || this.props.textComponentProps !== nextProps.textComponentProps) {
+      this.startHtmlRender(nextProps.value, nextProps.stylesheet, nextProps.textComponentProps);
     }
   }
 
@@ -64,7 +64,7 @@ class HtmlView extends PureComponent {
     this.mounted = false;
   }
 
-  startHtmlRender(value, style, textComponentProps, nodeComponentProps) {
+  startHtmlRender(value, style, textComponentProps) {
     const {
       addLineBreaks,
       onLinkPress,
@@ -94,10 +94,6 @@ class HtmlView extends PureComponent {
 
     if (textComponentProps) {
       opts.textComponentProps = textComponentProps;
-    }
-
-    if (nodeComponentProps) {
-      opts.nodeComponentProps = nodeComponentProps;
     }
 
     htmlToElement(value, opts, (err, element) => {
